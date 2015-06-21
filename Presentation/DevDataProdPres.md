@@ -41,8 +41,22 @@ The Application presents the user with 3 options on which the dataset "attitude"
 - The data comes from Chatterjee–Price Attitude Data.
 - It is a data frame of 30 observations (departments) with the following summary
 
-```{r, echo=FALSE}
-summary(attitude)
+
+```
+##      rating        complaints     privileges       learning    
+##  Min.   :40.00   Min.   :37.0   Min.   :30.00   Min.   :34.00  
+##  1st Qu.:58.75   1st Qu.:58.5   1st Qu.:45.00   1st Qu.:47.00  
+##  Median :65.50   Median :65.0   Median :51.50   Median :56.50  
+##  Mean   :64.63   Mean   :66.6   Mean   :53.13   Mean   :56.37  
+##  3rd Qu.:71.75   3rd Qu.:77.0   3rd Qu.:62.50   3rd Qu.:66.75  
+##  Max.   :85.00   Max.   :90.0   Max.   :83.00   Max.   :75.00  
+##      raises         critical        advance     
+##  Min.   :43.00   Min.   :49.00   Min.   :25.00  
+##  1st Qu.:58.25   1st Qu.:69.25   1st Qu.:35.00  
+##  Median :63.50   Median :77.50   Median :41.00  
+##  Mean   :64.63   Mean   :74.77   Mean   :42.93  
+##  3rd Qu.:71.00   3rd Qu.:80.00   3rd Qu.:47.75  
+##  Max.   :88.00   Max.   :92.00   Max.   :72.00
 ```
 
 ---
@@ -51,9 +65,4 @@ summary(attitude)
 
 - From the six attitude characteristics, the best model computed takes into account complaints and learning. Accounts for 68.63867% of the variance.
 
-```{r, echo=FALSE}
-fit_best <- lm(rating~complaints+learning,
-                  data=attitude)
-par(mfrow=c(2, 2))
-plot(fit_best)
-```
+![plot of chunk unnamed-chunk-2](assets/fig/unnamed-chunk-2-1.png) 
