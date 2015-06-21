@@ -18,7 +18,7 @@ The data was extracted from questionnaires of approximately 35 employees for eac
 It is a data frame with 30 observations on 7 variables.
 
 ```r
-   Y    rating     Overall rating"),
+   Y    rating      Overall rating
   X[1]  complaints  Handling of employee complaints
   X[2]  privileges	Does not allow special privileges
   X[3]  learning	  Opportunity to learn
