@@ -10,46 +10,44 @@ shinyServer(function(input, output) {
   })
   
   formulaTextPoint <- reactive({
-    p <- "";
+    p <- ""
     if(input$complaints) {
-      paste(p, "+", "complaints")
+      p <- paste(p,"complaints",sep="+")
     }
     if(input$privileges) {
-      paste(p, "+", "privileges")
+      p <- paste(p,"privileges",sep="+")
     }
     if(input$learning) {
-      paste(p, "+", "learning")
+      p <- paste(p,"learning",sep="+")
     }
     if(input$raises) {
-      paste(p, "+", "raises")
+      p <- paste(p,"raises",sep="+")
     }
     if(input$critical) {
-      paste(p, "+", "critical")
+      p <- paste(p,"critical",sep="+")
     }
     if(input$advance) {
-      paste(p, "+", "advance")
+      p <- paste(p,"advance",sep="+")
     }
-    if(p == "") {
-      p <- "."
+    if(nchar(p) > 0) {
+      p <- substr(p,2,nchar(p))
     }
     else {
-      p <- substr(p,3,nchar(p))
+      p <- paste(p,"complaints+privileges+learning+raises+critical+advance")
     }
-    paste("rating ~", p)
+    paste("rating ~ ", p)
   })
   
   fit <- reactive({
-    lm(as.formula(formulaTextPoint()), data=ratingData)
+    lm(as.formula(formulaTextPoint()),data=ratingData)
   })
   
   output$caption <- renderText({
-    formulaText()
+    formulaTextPoint()
   })
   
-  output$ratingBoxPlot <- renderPlot({
-    boxplot(as.formula(formulaText()), 
-            data = ratingData,
-            outline = input$outliers)
+  output$captionBox <- renderText({
+    formulaText()
   })
   
   output$fit <- renderPrint({
@@ -58,9 +56,17 @@ shinyServer(function(input, output) {
   
   output$ratingPlot <- renderPlot({
     with(ratingData, {
-      plot(as.formula(formulaTextPoint()))
+      par(mfrow=c(2, 2))
+      plot(lm(as.formula(formulaTextPoint()),data=ratingData))
       abline(fit(), col=2)
     })
+  })
+  
+  output$ratingBoxPlot <- renderPlot({
+    boxplot(as.formula(formulaText()), 
+            data = ratingData,
+            xlab = input$variable,
+            ylab = "rating")
   })
   
 })

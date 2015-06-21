@@ -19,8 +19,8 @@ shinyUI(
                       p("  X[5]  critical	  Too critical"),
                       p("  X[6]  advance	  Advancement"),
                       
-                      h3("Help on use")
-                      p("In order to use this app, select the variables for which the linear model will be constructed, or the variable to see the boxplot of the rating vs the selected variable.")
+                      h3("Help on use"),
+                      p("In order to use this app, select the variables for which the linear model will be constructed, or the variable to see the boxplot of the rating vs the selected variable."),
                       
                       h3("Source"),
                       
@@ -31,47 +31,34 @@ shinyUI(
                         titlePanel("The relationship between variables and overall rating"),
                         sidebarLayout(
                           sidebarPanel(
+                            helpText("Select variables for the linear model."),
                             checkboxInput('complaints', 'Complaints'),
                             checkboxInput('privileges', 'Privileges'),
                             checkboxInput('learning', 'Learning'),
                             checkboxInput('raises', 'Raises'),
                             checkboxInput('critical', 'Critical'),
                             checkboxInput('advance', 'Advancement'),
+                            helpText("Select the variable for the box plot."),
+                            selectInput("variable", "Variable:",
+                                        c("Complaints" = "complaints",
+                                          "Privileges" = "privileges",
+                                          "Learning" = "learning",
+                                          "Raises" = "raises",
+                                          "Critical" = "critical",
+                                          "Advancement" = "advance"
+                                        ))
                           ),
                           
                           mainPanel(
-                            h3(textOutput("caption")),
-                            
                             tabsetPanel(type = "tabs", 
                                         tabPanel("Regression model", 
+                                                 h3(textOutput("caption")),
                                                  plotOutput("ratingPlot"),
                                                  verbatimTextOutput("fit")
-                                        )
-                            )
-                          )
-                        )
-                      )
-             ),
-             tabPanel("Analysis",
-                      fluidPage(
-                        titlePanel("The relationship between variables and overall rating"),
-                        sidebarPanel(
-                          selectInput("variable", "Variable:",
-                                      c("Complaints" = "complaints",
-                                        "Privileges" = "privileges",
-                                        "Learning" = "learning",
-                                        "Raises" = "raises",
-                                        "Critical" = "critical",
-                                        "Advancement" = "advance"
-                                      )),
-                          
-                          checkboxInput("outliers", "Show BoxPlot's outliers", FALSE)
-                          
-                          mainPanel(
-                            h3(textOutput("caption")),
-                            
-                            tabsetPanel(type = "tabs", 
-                                        tabPanel("BoxPlot", plotOutput("ratingBoxPlot"))
+                                        ),
+                                        tabPanel("BoxPlot",
+                                                 h3(textOutput("captionBox")),
+                                                 plotOutput("ratingBoxPlot"))
                             )
                           )
                         )
