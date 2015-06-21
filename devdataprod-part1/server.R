@@ -42,8 +42,16 @@ shinyServer(function(input, output) {
     lm(as.formula(formulaTextPoint()),data=ratingData)
   })
   
+  fitSingle <- reactive({
+    lm(as.formula(formulaText()),data=ratingData)
+  })
+  
   output$caption <- renderText({
     formulaTextPoint()
+  })
+  
+  output$captionSingle <- renderText({
+    formulaText()
   })
   
   output$captionBox <- renderText({
@@ -54,11 +62,25 @@ shinyServer(function(input, output) {
     summary(fit())
   })
   
+  output$fitSingle <- renderPrint({
+    summary(fitSingle())
+  })
+  
   output$ratingPlot <- renderPlot({
     with(ratingData, {
       par(mfrow=c(2, 2))
       plot(lm(as.formula(formulaTextPoint()),data=ratingData))
       abline(fit(), col=2)
+    })
+  })
+  
+  output$ratingPlotSingle <- renderPlot({
+    with(ratingData, {
+      plot(as.formula(formulaText()),
+      data = ratingData,
+      xlab = input$variable,
+      ylab = "rating")
+      abline(fitSingle(), col=2)
     })
   })
   

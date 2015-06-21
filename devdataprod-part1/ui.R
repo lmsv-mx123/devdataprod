@@ -31,14 +31,14 @@ shinyUI(
                         titlePanel("The relationship between variables and overall rating"),
                         sidebarLayout(
                           sidebarPanel(
-                            helpText("Select variables for the linear model."),
+                            helpText("Select variables for the multiple variable linear model."),
                             checkboxInput('complaints', 'Complaints'),
                             checkboxInput('privileges', 'Privileges'),
                             checkboxInput('learning', 'Learning'),
                             checkboxInput('raises', 'Raises'),
                             checkboxInput('critical', 'Critical'),
                             checkboxInput('advance', 'Advancement'),
-                            helpText("Select the variable for the box plot."),
+                            helpText("Select the variable for the single variable model / box plots."),
                             selectInput("variable", "Variable:",
                                         c("Complaints" = "complaints",
                                           "Privileges" = "privileges",
@@ -51,10 +51,15 @@ shinyUI(
                           
                           mainPanel(
                             tabsetPanel(type = "tabs", 
-                                        tabPanel("Regression model", 
+                                        tabPanel("Multi-Regression model", 
                                                  h3(textOutput("caption")),
                                                  plotOutput("ratingPlot"),
                                                  verbatimTextOutput("fit")
+                                        ),
+                                        tabPanel("Single-Regression model",
+                                                 h3(textOutput("captionSingle")),
+                                                 plotOutput("ratingPlotSingle"),
+                                                 verbatimTextOutput("fitSingle")
                                         ),
                                         tabPanel("BoxPlot",
                                                  h3(textOutput("captionBox")),
@@ -71,7 +76,7 @@ shinyUI(
              tabPanel("Report",
                       a("http://lmsv-mx123.github.io/devdataprod/Report/DocDevDataProdProj.html"),
                       hr(),
-                      tags$iframe(src="DocDevDataProdProj.html", 
+                      tags$iframe(src="http://lmsv-mx123.github.io/devdataprod/Report/DocDevDataProdProj.html", 
                                   width="100%", height=600, frameborder=0, 
                                   seamless=NA)
              )
