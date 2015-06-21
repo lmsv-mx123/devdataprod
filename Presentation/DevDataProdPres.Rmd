@@ -1,0 +1,46 @@
+---
+title: "Developing Data Prods Project"
+author: "Luis Salazar"
+date: "June 21, 2015"
+output: slidy_presentation
+---
+
+## Introduction
+
+The aim of this presentation is to present the application that I created for the user to get to experience single and multiple variable regression on a dataset "attitude", which relates employee characteristics such as his/her ability to handle complaints to overall rating.
+
+A report accompanies this presentation, available [here](http://http://lmsv-mx123.github.io/devdataprod/Report/DocDevDataProdProj.html)
+
+The application is hosted [here](https://lmsv-mx123.shinyapps.io/devdataprodapp)
+
+## Application description
+
+The Application presents the user with 3 options on which the dataset "attitude can be analysed"
+
+- BoxPlot: Presents data for rating vs the chosen dependent variable/characteristic.
+- Single-Regression model: Gives a scatter plot of the rating vs the chosen variable, fitted with the linear model calculated from the chosen variable. Additionally, a summary with the residuals, coefficients and R-squared information is presented.
+- Mutiple-Regression model: Gives a 2x2 matrix plot (Residuals vs Fitted & Scale location to see if there is a particular pattern, Normal Q-Q plot to see if the distibution is normal, and Residuals vs Leverage to see is there is a particular outlier to be concerned) computed from the selected variables/characteristics. Like the single-regression, multiple-regression shows also the summary of the linear model computed.
+
+## The data set
+
+- The data comes from Chatterjee–Price Attitude Data
+- It was extracted from questionnaires of approximately 35 employees for each 30 (randomly selected) departments, and comprises overall rating and 6 different attitude characteristics.
+- It is a data frame of 30 observations (departments) with the following variables:
+I. rating - Overall rating; II. complaints - Handling of employee complaints; III. privileges - Does not allow special privileges; IV. learning - Opportunity to learn; V. raises - Raises based on performance; VI. critical - Too critical; VII. advance - Advancement
+
+```{r}
+summary(attitude)
+```
+
+## The best linear model
+
+- From the six attitude characteristics, the best model computed takes into account complaints and learning.
+- Accounts for 68.63867% of the variance.
+
+```{r, echo=FALSE}
+fit_best <- lm(rating~complaints+learning,
+                  data=attitude)
+par(mfrow=c(2, 2))
+plot(fit_best)
+```
+
