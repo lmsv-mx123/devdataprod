@@ -18,7 +18,7 @@ The aim of this presentation is to present the application that I created for th
 
 The description of the variables are: I. rating - Overall rating; II. complaints - Handling of employee complaints; III. privileges - Does not allow special privileges; IV. learning - Opportunity to learn; V. raises - Raises based on performance; VI. critical - Too critical; VII. advance - Advancement.
 
-A report accompanies this presentation, available [here](http://http://lmsv-mx123.github.io/devdataprod/Report/DocDevDataProdProj.html)
+A report accompanies this presentation, available [here](http://lmsv-mx123.github.io/devdataprod/Report/DocDevDataProdProj.html)
 
 The application is hosted [here](https://lmsv-mx123.shinyapps.io/devdataprodapp)
 
