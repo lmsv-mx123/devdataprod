@@ -1,0 +1,108 @@
+---
+title: "Impacts of characteristics on overall rating"
+output: 
+  html_document:
+    keep_md: true
+---
+
+## Executive Summary
+Rating for employees depend on factors such as if they are able to handle complaints, allow or not privileges, and provide learning opportunities, just to name a few. The attitude data set is a collection of data for which overall rating is influenced by the following factors: complaints, privileges, learning, raises, critical and advance. These variables, however, are correlated. A basic model taking only into account complaints is a good linear model, but not the best. The best computed model adds learning aditionally to complaints, for which each complaint handled gives 0.64 more rating and 0.21 rating is increased for each learning opportunity provided.
+
+## Initialization and exploratory data analysis
+Load required libraries and echo code used.
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+library(datasets)
+library(ggplot2)
+setwd("~/")
+```
+Let's examine the dataset.
+```{r}
+str(attitude,vec.len=1)
+```
+It is a data frame of 30 observations (departments) with the following variables:
+1. rating - Overall rating
+2. complaints - Handling of employee complaints
+3. privileges - Does not allow special privileges
+4. learning - Opportunity to learn
+5. raises - Raises based on performance
+6. critical - Too critical
+7. advance - Advancement
+
+All variables are numeric
+
+## Analysis
+Overall rating for clerical employees is influenced by factors such as the handling of complaints, if they allow special privileges or provide learning oportunities, etc. (The appendix provides some plots in the correlations between variables). For instance, if we look at a one-variable regression between rating and complaints, we get
+
+
+```{r}
+fit_basic <- lm(rating~complaints, data=attitude)
+print(t(summary(fit_basic)$coefficients))
+print(summary(fit_basic)$adj.r.squared)
+```
+Without complaints, the base rating is 14 which for each complaint that the employee is able to handle the expected rating goes up by 0.75. Taking into consideration only complaints accounts for 67% of the variance and there is most likely a better model if multivariable is used. Taking into consideration three out of the six variables, for example complaints, privileges, and learning provides the following result:
+ 
+```{r}
+fit_another <- lm(rating~complaints+privileges+learning,
+                  data=attitude)
+print(summary(fit_another)$coefficients[,1:3])
+print(summary(fit_another)$adj.r.squared)
+```
+This new model acounts for a little bit more of the variance than the single variable model. The base rating goes down to 11 with each complaint handled increasing it by 0.68, each privilege not allowed decreasing it by 0.10 and each learning opportunity increases rating by 0.24.
+
+Taking into account every variable perhaps leads to a better result. Inputing this into R, leads to
+```{r}
+fit_all <- lm(rating~complaints+privileges+learning+raises+critical+advance,
+                  data=attitude)
+print(summary(fit_all)$coefficients[,1:3])
+print(summary(fit_all)$adj.r.squared)
+```
+Although factors such as base rating remain close to the previous results, the accounted R^2 actually went down by 2%! Perhaps the best model is a combination of the variables, and for that let's use the step function to determine what the best linear model is
+```{r}
+fit_best <- step(lm(rating~., data=attitude),
+                 direction="both", trace=0)
+```
+```{r,eval=FALSE}
+print(summary(fit_best)$call)
+##Call:
+##lm(formula=rating~complaints+learning,data=attitude)
+```
+```{r}
+print(summary(summary(fit_best)$residuals))
+print(summary(fit_best)$coefficients[,1:3])
+print(summary(fit_best)$adj.r.squared)
+```
+Surprisingly enough, the best model is only based on complaints and learning. With this model, the base rating is 9.87, which increases by 0.64 for each complaint handled and 0.21 for each learning opportunity provided.
+```{r}
+par(mfrow=c(2, 2))
+plot(fit_best)
+```
+The plots of Residuals vs Fitted and Scale-Location show no particular pattern. Additionally, the Normal Q-Q plot depicts that the residuals follow approximately a Normal distribution and from the plot of Residuals vs Leverage, there is no outlier to be concerned.
+
+## Conclusions
+Although the overall rating for clerical employees depends on factors such as complaints, learning, privileges, raises, critical, advance, it is only the first two factors which make up the best model from the attitude data set.
+
+## Appendix
+
+### Attitude data set correlations
+```{r}
+data(attitude)
+heatmap(cor(attitude), main=
+          "Correlation between variables")
+```
+
+```{r}
+pairs(attitude, panel=panel.smooth, main=
+        "Matrix of scatterplots between
+      pairs of variables")
+```
+
+### Residual plots for basic and another fit models
+```{r}
+par(mfrow=c(2, 2))
+plot(fit_basic)
+```
+
+```{r}
+par(mfrow=c(2, 2))
+plot(fit_another)
+```
